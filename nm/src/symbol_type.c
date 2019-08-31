@@ -42,6 +42,6 @@ void		get_symbol_letter(t_sym *sym, t_list *sects)
 		match_symbol_section(sects, sym);
 	else if ((N_TYPE & sym->type) == N_INDR)
 		sym->type_s = 'I';
-	if (!(N_EXT & sym->type))
+	if (!(N_EXT & sym->type) && ft_isalpha(sym->type_s))
 		sym->type_s = ft_tolower(sym->type_s);
 }
