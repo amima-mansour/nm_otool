@@ -12,7 +12,7 @@
 
 #include "ft_nm.h"
 
-char	*get_archi_name(cpu_type_t cpu_type, cpu_subtype_t cpu_subtype)
+char	*get_arch_name(cpu_type_t cpu_type, cpu_subtype_t cpu_subtype)
 {
 	if (cpu_type == CPU_TYPE_I386)
 		return ("i386");

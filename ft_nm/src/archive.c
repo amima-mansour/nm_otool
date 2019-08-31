@@ -51,7 +51,7 @@ bool	handle_archive(t_file *file)
 	if (ran == NULL || iscorrup(file, (void*)ran + ran_size, sizeof(table_size)) == NULL)
 	{
 		if (!iscorrup(file, (void*)ran + ran_size, sizeof(table_size)))
-		    return (errors(file->filename, CORRUPT_FILE));
+			return (errors(file->filename, CORRUPT_FILE));
 	}
 	table_size = *(uint32_t*)((void*)ran + ran_size);
 	list_all(file, ran, ran_size, table_size);

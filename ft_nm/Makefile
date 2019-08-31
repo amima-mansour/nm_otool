@@ -19,7 +19,7 @@ SRCS		= $(addprefix $(PATH_SRC)/, \
 							handle.c\
 							fat32.c\
 							fat64.c\
-							arch.c\
+							get_arch_name.c\
 							archive.c\
 							nm_print.c\
 							sort.c\
