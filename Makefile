@@ -23,7 +23,7 @@ LIBFT_H = $(LIBFT_DIR)/inc
 ################################################################################
 
 all : $(LIBFT)
-	@make -C ft_nm
+	@make -C nm
 	@printf "\033[1;33m%s\033[0m\n" "FT_NM"
 
 $(LIBFT) :
@@ -31,11 +31,11 @@ $(LIBFT) :
 	@printf "%-45s\033[1;32m%s\033[0m\n" "Make $@" "OK"
 
 clean :
-	@make -C ft_nm clean
+	@make -C nm clean
 
 
 fclean : clean
-	@make -C ft_nm fclean
+	@make -C nm fclean
 
 
 fclean_lib :

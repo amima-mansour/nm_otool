@@ -39,7 +39,7 @@ bool	    print_output_32(struct symtab_command *sym, t_file *file, uint32_t nsym
 		data[i].sect = symtable[i].n_sect;
 		data[i].desc = symtable[i].n_desc;
 	}
-	alpha_sort(data, nsyms, file->sects, false);
+	print_nm(data, nsyms, file->sects, false);
 	return (false);
 }
 
@@ -68,6 +68,6 @@ bool		print_output_64(struct symtab_command *sym, t_file *file, uint32_t nsyms)
 		data[i].sect = symtable[i].n_sect;
 		data[i].desc = symtable[i].n_desc;
 	}
-	alpha_sort(data, nsyms, file->sects, true);
+	print_nm(data, nsyms, file->sects, true);
 	return (false);
 }

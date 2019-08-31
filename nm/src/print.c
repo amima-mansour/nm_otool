@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools.c                                            :+:      :+:    :+:   */
+/*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -32,7 +32,7 @@ static uint32_t	select_alpha_min(t_sym data[], uint32_t start, uint32_t finish)
 	return (index);
 }
 
-void		alpha_sort(t_sym data[], uint32_t len, t_list *sects, bool is64)
+static void		alpha_sort(t_sym *data[], uint32_t len)
 {
 	uint32_t	i;
 	t_sym		tmp;
@@ -41,11 +41,18 @@ void		alpha_sort(t_sym data[], uint32_t len, t_list *sects, bool is64)
 	i = -1;
 	while (++i < (len - 1))
 	{
-		index_min = select_alpha_min(data, i, len - 1);
-		tmp = data[i];
-		data[i] = data[index_min];
-		data[index_min] = tmp;
+		index_min = select_alpha_min(*data, i, len - 1);
+		tmp = (*data)[i];
+		(*data)[i] = (*data)[index_min];
+		(*data)[index_min] = tmp;
 	}
+}
+
+void		print_nm(t_sym data[], uint32_t len, t_list *sects, bool is64)
+{
+	uint32_t	i;
+
+	alpha_sort(&data, len);
 	i = -1;
 	while (++i < len)
 		get_symbol_letter(&(data[i]), sects);

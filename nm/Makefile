@@ -22,7 +22,7 @@ SRCS		= $(addprefix $(PATH_SRC)/, \
 							get_arch_name.c\
 							archive.c\
 							nm_print.c\
-							sort.c\
+							print.c\
 							sections.c\
 							swap.c\
 							symbol_type.c\

@@ -104,7 +104,7 @@ bool								print_output_64(struct symtab_command *sym, t_file *file, uint32_t n
 /**
  *  sort
  */
-void								alpha_sort(t_sym data[], uint32_t len, t_list *sects, bool is64);
+void								print_nm(t_sym data[], uint32_t len, t_list *sects, bool is64);
 /**
  * tools
  */
