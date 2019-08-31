@@ -117,5 +117,6 @@ bool								errors(char *name, char *msg);
  * 
  */
 char								*get_arch_name(cpu_type_t cpu_type, cpu_subtype_t cpu_subtype);
+void								get_symbol_letter(t_sym *sym, t_list *sects);
 #endif
 

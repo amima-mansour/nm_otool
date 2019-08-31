@@ -25,6 +25,7 @@ SRCS		= $(addprefix $(PATH_SRC)/, \
 							sort.c\
 							sections.c\
 							swap.c\
+							symbol_type.c\
 							errors.c)
 
 ################################################################################
