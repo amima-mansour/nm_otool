@@ -48,13 +48,15 @@ all: $(NAME)
 
 $(NAME): $(LIBRARY) $(OBJECTS)
 	@$(CC) $(CFLAGS) $^ -o $@
+	@printf "%-45s\033[1;32m%s\033[0m\n" "Make $@" "OK"
 
 $(PATH_OBJ)/%.o: $(addprefix $(PATH_SRC)/,%.c)
 	@mkdir -p $(PATH_OBJ)
 	@gcc -c -o $@ $(CFLAGS) $^ -I $(PATH_INC)/
-
+	@printf "%-45s\033[1;32m%s\033[0m\n" "Make $@" "OK"
 $(LIBRARY):
 	@make -C ../libft/
+	@printf "%-45s\033[1;32m%s\033[0m\n" "Make $@" "OK"
 
 # - - - - - - - - — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — —
 
