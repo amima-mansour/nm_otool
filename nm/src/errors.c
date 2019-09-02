@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 10:55:46 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 10:56:24 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 15:37:28 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,4 @@ bool			errors(char *filename, char *msg)
 	ft_putstr_fd(msg, 2);
 	ft_putchar_fd('\n', 2);
 	return (true);
-}
-
-int				nm_usage(void)
-{
-	ft_printf("Usage: %s [file ...]\n", "ft_nm");
-	return (EXIT_FAILURE);
 }

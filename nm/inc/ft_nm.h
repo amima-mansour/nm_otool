@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:05:38 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:15:14 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 15:37:43 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ uint32_t				swap32(bool value, uint32_t n);
 uint64_t				swap64(bool value, uint64_t n);
 bool					is_swap(uint32_t magic);
 void					*iscorrup(t_file *file, void *ptr, uint64_t size);
-int						nm_usage(void);
 bool					errors(char *name, char *msg);
 
 char					*get_arch_name(cpu_type_t cpu_type, \
