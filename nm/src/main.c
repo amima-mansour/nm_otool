@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:10:25 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 12:32:25 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 13:23:55 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool			nm(void *ptr, uint64_t size, char *filename, char *archive)
 	return (errors(filename, NOT_RECOGNIZED));
 }
 
-static bool		treat_file(int fd, char *name, int ac)
+static bool		treat_file(int fd, char *name)
 {
 	struct stat	buf;
 	void		*ptr;
@@ -64,8 +64,6 @@ static bool		treat_file(int fd, char *name, int ac)
 	if ((ptr = mmap(0, buf.st_size, PROT_READ, \
 					MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		return (errors(name, MAP_ERROR));
-	if (ac > 2)
-		ft_printf("%s:\n", name);
 	value = nm(ptr, buf.st_size, name, NULL);
 	if (munmap(ptr, buf.st_size) < 0)
 		return (errors(name, MUN_ERROR));
@@ -80,11 +78,12 @@ int				main(int ac, char **av)
 	int		i;
 
 	i = 0;
+	g_multi_file = ac > 1;
 	if (ac < 2)
 	{
 		if ((fd = open(DEFAULT_FILE, O_RDONLY)) < 0)
 			errors(DEFAULT_FILE, OPEN_ERROR);
-		if (fd < 0 || treat_file(fd, DEFAULT_FILE, ac))
+		if (fd < 0 || treat_file(fd, DEFAULT_FILE))
 			return (EXIT_FAILURE);
 	}
 	while (++i < ac)
@@ -94,7 +93,7 @@ int				main(int ac, char **av)
 			errors(av[i], OPEN_ERROR);
 			return (EXIT_FAILURE);
 		}
-		if (treat_file(fd, av[i], ac))
+		if (treat_file(fd, av[i]))
 			return (EXIT_FAILURE);
 		ac -= 1;
 	}

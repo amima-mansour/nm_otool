@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:05:38 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 12:15:55 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 13:17:10 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ typedef struct						s_file
 	t_list							*sects;
 	//t_list							*syms;
 }									t_file;
+
+bool								g_multi_file;
 
 int									main(int argc, char **av);
 bool								nm(void *ptr, uint64_t size, char *name, char *arch);

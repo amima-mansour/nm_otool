@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:07:41 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 12:07:45 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 13:25:11 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ bool	output_32(struct symtab_command *sym, t_file *f, uint32_t nsyms)
 	{
 		data[i].name = (char*)iscorrup(f, str + swap32(f->swap_bits, \
 					table[i].n_un.n_strx), sizeof(*(data[i].name)));
-		if (!(data[i].name))
-			data[i].name = BAD_STRING;
+		data[i].name = (!(data[i].name)) ? BAD_STRING : data[i].name;
 		data[i].type = table[i].n_type;
 		data[i].value = swap32(f->swap_bits, table[i].n_value);
 		data[i].sect = table[i].n_sect;
 		data[i].desc = table[i].n_desc;
 	}
+	(g_multi_file) ? ft_printf("%s:\n", f->filename) : 0;
 	print_nm(data, nsyms, f->sects, false);
 	return (false);
 }
@@ -59,13 +59,13 @@ bool	output_64(struct symtab_command *sym, t_file *f, uint32_t nsyms)
 	{
 		data[i].name = (char*)iscorrup(f, str + swap32(f->swap_bits, \
 					table[i].n_un.n_strx), sizeof(*data[i].name));
-		if (!(data[i].name))
-			data[i].name = BAD_STRING;
+		data[i].name = (!(data[i].name)) ? BAD_STRING : data[i].name;
 		data[i].type = table[i].n_type;
 		data[i].value = swap64(f->swap_bits, table[i].n_value);
 		data[i].sect = table[i].n_sect;
 		data[i].desc = table[i].n_desc;
 	}
 	print_nm(data, nsyms, f->sects, true);
+	(g_multi_file) ? ft_printf("%s:\n", f->filename) : 0;
 	return (false);
 }
