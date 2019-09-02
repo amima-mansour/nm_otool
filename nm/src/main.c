@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:10:25 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 13:23:55 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 13:27:05 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int				main(int ac, char **av)
 	int		i;
 
 	i = 0;
-	g_multi_file = ac > 1;
+	g_multi_file = ac > 2;
 	if (ac < 2)
 	{
 		if ((fd = open(DEFAULT_FILE, O_RDONLY)) < 0)
