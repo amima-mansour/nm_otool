@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:07:41 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 13:32:21 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 13:35:30 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	output_32(struct symtab_command *sym, t_file *f, uint32_t nsyms)
 		data[i].sect = table[i].n_sect;
 		data[i].desc = table[i].n_desc;
 	}
-	(g_multi_file) ? ft_printf("%s:\n", f->filename) : 0;
+	(g_multi_file) ? ft_printf("\n%s:\n", f->filename) : 0;
 	print_nm(data, nsyms, f->sects, false);
 	return (false);
 }
@@ -65,7 +65,7 @@ bool	output_64(struct symtab_command *sym, t_file *f, uint32_t nsyms)
 		data[i].sect = table[i].n_sect;
 		data[i].desc = table[i].n_desc;
 	}
-	(g_multi_file) ? ft_printf("%s:\n", f->filename) : 0;
+	(g_multi_file) ? ft_printf("\n%s:\n", f->filename) : 0;
 	print_nm(data, nsyms, f->sects, true);
 	return (false);
 }
