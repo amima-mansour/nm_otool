@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:10:25 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 13:31:42 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 14:58:18 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ bool			nm(void *ptr, uint64_t size, char *filename, char *archive)
 		return (handle_fat_32(&file));
 	if (ft_strncmp((char *)ptr, ARMAG, SARMAG) == 0)
 		return (handle_archive(&file));
-	return (errors(filename, NOT_RECOGNIZED));
+	return (errors(filename, NOT_VALID));
 }
 
 static bool		treat_file(int fd, char *name)
@@ -66,7 +66,7 @@ static bool		treat_file(int fd, char *name)
 		return (errors(name, MAP_ERROR));
 	value = nm(ptr, buf.st_size, name, NULL);
 	if (munmap(ptr, buf.st_size) < 0)
-		return (errors(name, MUN_ERROR));
+		return (errors(name, NOT_VALID));
 	if (close(fd) == -1)
 		return (errors(name, CLOSE_ERROR));
 	return (value);

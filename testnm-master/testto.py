@@ -10,12 +10,12 @@ import textwrap
 
 
 # absolute path to your nm_otool project
-PROJECT_PATH = '/Users/dogokar/nm_otool/'
+PROJECT_PATH = '/Users/amansour/42File/nm_otool/nm/'
 
-VALGRPATH = '/Users/dogokar/.brew/bin/valgrind'
+VALGRPATH = '/Users/amansour/.brew/bin/valgrind'
 NM_PATH = os.path.join(PROJECT_PATH, 'ft_nm')
 FINALLINE = os.path.join(VALGRPATH, NM_PATH)
-OTOOL_PATH = os.path.join(PROJECT_PATH, 'ft_otool')
+#OTOOL_PATH = os.path.join(PROJECT_PATH, 'ft_otool')
 
 def create_seg(name_file):
   fichier = open("data_error.txt", "a")
