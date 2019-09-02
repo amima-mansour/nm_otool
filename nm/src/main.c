@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:10:25 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 14:58:18 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 15:33:38 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ static bool		treat_file(int fd, char *name)
 		return (errors(name, DIR));
 	if ((ptr = mmap(0, buf.st_size, PROT_READ, \
 					MAP_PRIVATE, fd, 0)) == MAP_FAILED)
-		return (errors(name, MAP_ERROR));
+		return (errors(name, NOT_VALID));
 	value = nm(ptr, buf.st_size, name, NULL);
 	if (munmap(ptr, buf.st_size) < 0)
-		return (errors(name, NOT_VALID));
+		return (errors(name, MUN_ERROR));
 	if (close(fd) == -1)
 		return (errors(name, CLOSE_ERROR));
 	return (value);

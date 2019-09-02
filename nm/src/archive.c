@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 10:43:26 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 10:55:33 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 15:30:47 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ bool				handle_archive(t_file *f)
 	uint32_t		t_size;
 
 	if (!(hd = (struct ar_hdr*)iscorrup(f, f->ptr + SARMAG, sizeof(*hd))))
-		return (errors(f->filename, CORRUPT_FILE));
+		return (false);
 	r_size = *(uint32_t*)((void*)(hd + 1) + extract_padding(hd->ar_name));
 	if (iscorrup(f, hd + 1, sizeof(r_size)) == NULL)
 		return (errors(f->filename, CORRUPT_FILE));
