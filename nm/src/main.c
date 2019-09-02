@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:10:25 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 13:27:05 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 13:31:42 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ int				main(int ac, char **av)
 		}
 		if (treat_file(fd, av[i]))
 			return (EXIT_FAILURE);
-		ac -= 1;
 	}
 	return (EXIT_SUCCESS);
 }

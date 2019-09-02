@@ -1,0 +1,11 @@
+                 U _errors
+00000000000001c0 t _extract_padding
+                 U _ft_atoi
+                 U _ft_strlen
+                 U _ft_strncmp
+0000000000000001 C _g_multi_file
+0000000000000000 T _handle_archive
+                 U _iscorrup
+0000000000000240 t _list_all
+                 U _nm
+obj/archive.o:
