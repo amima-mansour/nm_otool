@@ -6,76 +6,90 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 10:15:41 by amansour          #+#    #+#             */
-/*   Updated: 2019/08/30 15:38:20 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 12:09:14 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "ft_nm.h"
 
-static bool process(t_file *file, struct load_command *lc, uint32_t MACRO)
+static bool	process_64(t_file *f, struct load_command *lc, uint32_t macro)
 {
 	int			i;
 	uint32_t	nsyms;
 	bool		err;
 
-	file->nsects = 0;
+	f->nsects = 0;
 	i = -1;
 	err = false;
-	while (++i < file->ncmds && !err)
+	while (++i < f->ncmds && !err)
 	{
 		if (!lc)
-			return(errors(file->filename, CORRUPT_FILE));
-		if (file->arch == ARCH_64 && swap32(file->swap_bits, lc->cmdsize) % 8 != 0)
-			return (errors(file->filename, CORRUPT_FILE));
-		if (swap32(file->swap_bits, lc->cmd) == MACRO && (MACRO == LC_SEGMENT || MACRO == LC_SEGMENT_64))
+			return (errors(f->filename, CORRUPT_FILE));
+		if (swap32(f->swap_bits, lc->cmdsize) % 8 != 0)
+			return (errors(f->filename, CORRUPT_FILE));
+		if (swap32(f->swap_bits, lc->cmd) == macro && macro == LC_SEGMENT_64)
+			err = manage_sections_64(f, (void*)lc);
+		else if (swap32(f->swap_bits, lc->cmd) == macro)
 		{
-			if (MACRO == LC_SEGMENT)
-				err = manage_sections_32(file, (void*)lc);
-			else
-				err = manage_sections_64(file, (void*)lc);
+			nsyms = swap32(f->swap_bits, ((struct symtab_command *)lc)->nsyms);
+			err = output_64((void*)lc, f, nsyms);
 		}
-		else if (swap32(file->swap_bits, lc->cmd) == MACRO)
-		{
-			nsyms = swap32(file->swap_bits, ((struct symtab_command *)lc)->nsyms);
-			if (file->arch == ARCH_32)
-				err = print_output_32((void*)lc, file, nsyms);
-			else
-				err = print_output_64((void*)lc, file, nsyms);
-		}
-		lc = (struct load_command *)iscorrup(file, (void*)lc + swap32(file->swap_bits, lc->cmdsize), sizeof(*lc));
+		lc = (struct load_command *)iscorrup(f, (void*)lc + \
+				swap32(f->swap_bits, lc->cmdsize), sizeof(*lc));
 	}
 	return (err);
 }
 
-bool	handle_mach_o(t_file *file)
+static bool	process_32(t_file *f, struct load_command *lc, uint32_t macro)
+{
+	int			i;
+	uint32_t	nsyms;
+	bool		err;
+
+	f->nsects = 0;
+	i = -1;
+	err = false;
+	while (++i < f->ncmds && !err)
+	{
+		if (!lc)
+			return (errors(f->filename, CORRUPT_FILE));
+		if (swap32(f->swap_bits, lc->cmd) == macro && macro == LC_SEGMENT)
+			err = manage_sections_32(f, (void*)lc);
+		else if (swap32(f->swap_bits, lc->cmd) == macro)
+		{
+			nsyms = swap32(f->swap_bits, ((struct symtab_command *)lc)->nsyms);
+			err = output_32((void*)lc, f, nsyms);
+		}
+		lc = (struct load_command *)iscorrup(f, (void*)lc + \
+				swap32(f->swap_bits, lc->cmdsize), sizeof(*lc));
+	}
+	return (err);
+}
+
+bool		handle_mach_o(t_file *f)
 {
 	struct mach_header_64	*hd64;
 	struct mach_header		*hd;
 	struct load_command		*lc;
 	bool					err;
 
-	if (file->arch == ARCH_32)
+	if (f->arch == ARCH_32)
 	{
-		//pb with header
-		hd = (struct mach_header *)iscorrup(file, file->ptr, sizeof(*hd));
-		if (!hd)
-			return(errors(file->filename, CORRUPT_FILE));
-		file->ncmds = swap32(file->swap_bits, hd->ncmds);
-		lc = (struct load_command *)iscorrup(file, (file->ptr+ sizeof(*hd)), sizeof(*lc));
-		err = process(file, lc, LC_SEGMENT);
+		if (!(hd = (struct mach_header *)iscorrup(f, f->ptr, sizeof(*hd))))
+			return (errors(f->filename, CORRUPT_FILE));
+		f->ncmds = swap32(f->swap_bits, hd->ncmds);
+		lc = (struct load_command *)iscorrup(f, \
+				(f->ptr + sizeof(*hd)), sizeof(*lc));
+		if (!(err = process_32(f, lc, LC_SEGMENT)))
+			return (process_32(f, lc, LC_SYMTAB));
+		return (err);
 	}
-	else
-	{
-		//pb with header
-		hd64 = (struct mach_header_64 *)iscorrup(file, file->ptr, sizeof(*hd64));
-		if (!hd64)
-			return(errors(file->filename, CORRUPT_FILE));
-		file->ncmds = swap32(file->swap_bits, hd64->ncmds);
-		lc = (struct load_command *)iscorrup(file, (file->ptr + sizeof(*hd64)), sizeof(*lc));
-		err = process(file, lc, LC_SEGMENT_64);
-	}
-	if (!err)
-		err = process(file, lc, LC_SYMTAB);
+	if (!(hd64 = (struct mach_header_64 *)iscorrup(f, f->ptr, sizeof(*hd64))))
+		return (errors(f->filename, CORRUPT_FILE));
+	f->ncmds = swap32(f->swap_bits, hd64->ncmds);
+	lc = (struct load_command *)iscorrup(f, (f->ptr + \
+				sizeof(*hd64)), sizeof(*lc));
+	if (!(err = process_64(f, lc, LC_SEGMENT_64)))
+		return (process_64(f, lc, LC_SYMTAB));
 	return (err);
 }

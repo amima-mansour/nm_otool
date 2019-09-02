@@ -6,7 +6,7 @@
 #    By: amansour <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/29 13:33:28 by amansour          #+#    #+#              #
-#    Updated: 2019/08/21 15:12:02 by amansour         ###   ########.fr        #
+#    Updated: 2019/09/02 12:08:17 by amansour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCS		= $(addprefix $(PATH_SRC)/, \
 							fat64.c\
 							get_arch_name.c\
 							archive.c\
-							nm_print.c\
+							output.c\
 							print.c\
 							sections.c\
 							swap.c\

@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   symbol_type.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/02 12:12:03 by amansour          #+#    #+#             */
+/*   Updated: 2019/09/02 12:19:27 by amansour         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_nm.h"
+
 static t_sect	*find_section(t_list *lst, uint8_t n_sect)
 {
 	while (lst && lst->content)
@@ -27,16 +40,17 @@ static void		match_symbol_section(t_list *sect_lst, t_sym *sym)
 	}
 }
 
-void		get_symbol_letter(t_sym *sym, t_list *sects)
+static void		get_single_symbol(t_sym *sym, t_list *sects)
 {
 	sym->type_s = '?';
-    if (N_STAB & sym->type)
+	if (N_STAB & sym->type)
 		sym->type_s = '-';
-	else if ((N_TYPE & sym->type) == N_UNDF && sym->value != 0 && (sym->type & N_EXT))
+	else if ((N_TYPE & sym->type) == N_UNDF && \
+			sym->value != 0 && (sym->type & N_EXT))
 		sym->type_s = 'C';
 	else if ((N_TYPE & sym->type) == N_UNDF && (sym->type & N_EXT))
-        sym->type_s = 'U';
-    else if ((N_TYPE & sym->type) == N_ABS)
+		sym->type_s = 'U';
+	else if ((N_TYPE & sym->type) == N_ABS)
 		sym->type_s = 'A';
 	else if ((N_TYPE & sym->type) == N_SECT)
 		match_symbol_section(sects, sym);
@@ -44,4 +58,16 @@ void		get_symbol_letter(t_sym *sym, t_list *sects)
 		sym->type_s = 'I';
 	if (!(N_EXT & sym->type) && ft_isalpha(sym->type_s))
 		sym->type_s = ft_tolower(sym->type_s);
+}
+
+void			get_symbol_letter(t_sym *data, t_list *sects, uint32_t len)
+{
+	uint32_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		get_single_symbol(&(data[i]), sects);
+		i++;
+	}
 }

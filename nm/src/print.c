@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 11:22:28 by amansour          #+#    #+#             */
-/*   Updated: 2019/08/30 14:54:01 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 12:16:24 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,34 +48,31 @@ static void		alpha_sort(t_sym *data[], uint32_t len)
 	}
 }
 
-void		print_nm(t_sym data[], uint32_t len, t_list *sects, bool is64)
+void			print_nm(t_sym data[], uint32_t len, t_list *sects, bool is64)
 {
 	uint32_t	i;
 
 	alpha_sort(&data, len);
-	i = -1;
-	while (++i < len)
-		get_symbol_letter(&(data[i]), sects);
+	get_symbol_letter(data, sects, len);
 	i = -1;
 	while (++i < len)
 	{
 		if (data[i].type_s == '-')
 			continue ;
 		if (is64)
-        {
-            if (data[i].type_s != 'u' && data[i].type_s != 'U')
-                ft_printf("%.16llx ", data[i].value);
-            else
-                ft_printf("%17c", ' ');
-        }
-        else
-        {
-            if (data[i].type_s != 'u' && data[i].type_s != 'U')
-                ft_printf("%.8llx ", data[i].value);
-            else
-                ft_printf("%9c", ' ');
-        }
-        ft_printf("%c %s\n", data[i].type_s, data[i].name);
+		{
+			if (data[i].type_s != 'u' && data[i].type_s != 'U')
+				ft_printf("%.16llx ", data[i].value);
+			else
+				ft_printf("%17c", ' ');
+		}
+		else
+		{
+			if (data[i].type_s != 'u' && data[i].type_s != 'U')
+				ft_printf("%.8llx ", data[i].value);
+			else
+				ft_printf("%9c", ' ');
+		}
+		ft_printf("%c %s\n", data[i].type_s, data[i].name);
 	}
 }
-

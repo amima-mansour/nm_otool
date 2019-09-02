@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   archive.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/02 10:43:26 by amansour          #+#    #+#             */
+/*   Updated: 2019/09/02 10:55:33 by amansour         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_nm.h"
 
-static uint32_t	extract_padding(char *ar_name)
+static	uint32_t	extract_padding(char *ar_name)
 {
 	uint32_t	ar_str_size;
 
@@ -11,49 +23,52 @@ static uint32_t	extract_padding(char *ar_name)
 	return (ar_str_size);
 }
 
-static bool list_all(t_file *file, struct ranlib *ran, uint32_t ran_size, uint32_t table_size)
+static	bool		list_all(t_file *f, struct ranlib *ran, uint32_t r_size, \
+		uint32_t t_size)
 {
-	struct ar_hdr		*obj_header;
-	char				*obj_name;
-	uint32_t			obj_size;
+	struct ar_hdr	*hd;
+	char			*n;
+	uint32_t		size;
 
-	obj_header = iscorrup(file, (void*)ran + ran_size + sizeof(uint32_t) + table_size, sizeof(*obj_header));
-	if (!obj_header)
-		return (errors(file->filename, CORRUPT_FILE));
-	while (obj_header)
+	hd = iscorrup(f, (void*)ran + r_size + sizeof(uint32_t) + \
+			t_size, sizeof(*hd));
+	if (!hd)
+		return (errors(f->filename, CORRUPT_FILE));
+	while (hd)
 	{
-		obj_name = (char *)iscorrup(file, obj_header + 1, sizeof(*obj_name));
-		if (!obj_name)
-			return (errors(file->filename, CORRUPT_FILE));
-		obj_size = ft_atoi(obj_header->ar_size);
-		if (iscorrup(file, (void *)obj_name, obj_size) == NULL)
-			return (errors(file->filename, CORRUPT_FILE));
-		if (nm((void *)obj_name + extract_padding(obj_header->ar_name), obj_size, obj_name, file->filename))
+		n = (char *)iscorrup(f, hd + 1, sizeof(*n));
+		if (!n)
+			return (errors(f->filename, CORRUPT_FILE));
+		size = ft_atoi(hd->ar_size);
+		if (iscorrup(f, (void *)n, size) == NULL)
+			return (errors(f->filename, CORRUPT_FILE));
+		if (nm((void *)n + extract_padding(hd->ar_name), size, n, f->filename))
 			return (true);
-		obj_header = iscorrup(file, (void *)obj_header + sizeof(*obj_header) + obj_size, sizeof(*obj_header));
+		hd = iscorrup(f, (void *)hd + sizeof(*hd) + size, sizeof(*hd));
 	}
 	return (true);
 }
 
-bool	handle_archive(t_file *file)
+bool				handle_archive(t_file *f)
 {
 	struct ar_hdr	*hd;
 	struct ranlib	*ran;
-	uint32_t        ran_size;
-	uint32_t        table_size;
+	uint32_t		r_size;
+	uint32_t		t_size;
 
-	if (!(hd = (struct ar_hdr*)iscorrup(file, file->ptr + SARMAG, sizeof(*hd))))
-		return (errors(file->filename, CORRUPT_FILE));
-	ran_size = *(uint32_t*)((void*)(hd + 1) + extract_padding(hd->ar_name));
-	if (iscorrup(file, hd + 1, sizeof(ran_size)) == NULL)
-		return (errors(file->filename, CORRUPT_FILE));
-	ran = (struct ranlib*)iscorrup(file, (void*)(hd + 1) + extract_padding(hd->ar_name) + sizeof(uint32_t), sizeof(*ran));
-	if (ran == NULL || iscorrup(file, (void*)ran + ran_size, sizeof(table_size)) == NULL)
+	if (!(hd = (struct ar_hdr*)iscorrup(f, f->ptr + SARMAG, sizeof(*hd))))
+		return (errors(f->filename, CORRUPT_FILE));
+	r_size = *(uint32_t*)((void*)(hd + 1) + extract_padding(hd->ar_name));
+	if (iscorrup(f, hd + 1, sizeof(r_size)) == NULL)
+		return (errors(f->filename, CORRUPT_FILE));
+	ran = (struct ranlib*)iscorrup(f, (void*)(hd + 1) + \
+			extract_padding(hd->ar_name) + sizeof(uint32_t), sizeof(*ran));
+	if (!ran || iscorrup(f, (void*)ran + r_size, sizeof(t_size)) == NULL)
 	{
-		if (!iscorrup(file, (void*)ran + ran_size, sizeof(table_size)))
-			return (errors(file->filename, CORRUPT_FILE));
+		if (!iscorrup(f, (void*)ran + r_size, sizeof(t_size)))
+			return (errors(f->filename, CORRUPT_FILE));
 	}
-	table_size = *(uint32_t*)((void*)ran + ran_size);
-	list_all(file, ran, ran_size, table_size);
+	t_size = *(uint32_t*)((void*)ran + r_size);
+	list_all(f, ran, r_size, t_size);
 	return (false);
 }

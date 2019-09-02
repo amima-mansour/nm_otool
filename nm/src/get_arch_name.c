@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 10:39:47 by amansour          #+#    #+#             */
-/*   Updated: 2019/08/30 09:50:32 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 11:13:50 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,3 @@ char	*get_arch_name(cpu_type_t cpu_type, cpu_subtype_t cpu_subtype)
 		return ("armv7s");
 	return ("");
 }
-

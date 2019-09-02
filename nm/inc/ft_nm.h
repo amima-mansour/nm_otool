@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:05:38 by amansour          #+#    #+#             */
-/*   Updated: 2019/08/30 11:08:33 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 12:15:55 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ bool 								manage_sections_64(t_file *file, void *lc);
 /**
  * print nm
  */
-bool								print_output_32(struct symtab_command *sym, t_file *file, uint32_t nsyms);
-bool								print_output_64(struct symtab_command *sym, t_file *file, uint32_t nsyms);
+bool								output_32(struct symtab_command *sym, t_file *file, uint32_t nsyms);
+bool								output_64(struct symtab_command *sym, t_file *file, uint32_t nsyms);
 /**
  *  sort
  */
@@ -110,13 +110,12 @@ void								print_nm(t_sym data[], uint32_t len, t_list *sects, bool is64);
  */
 uint32_t							swap32(bool value, uint32_t n);
 uint64_t							swap64(bool value, uint64_t n);
+bool								is_swap(uint32_t magic);
 void								*iscorrup(t_file *file, void *ptr, uint64_t size);
 int									nm_usage(void);
 bool								errors(char *name, char *msg);
-/**
- * 
- */
+
 char								*get_arch_name(cpu_type_t cpu_type, cpu_subtype_t cpu_subtype);
-void								get_symbol_letter(t_sym *sym, t_list *sects);
+void								get_symbol_letter(t_sym *sym, t_list *sects, uint32_t len);
 #endif
 
