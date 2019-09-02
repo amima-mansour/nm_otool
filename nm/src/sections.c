@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 10:16:07 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 12:18:06 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 15:19:12 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	manage_sections_32(t_file *file, void *lc)
 		mysect.name = ((struct section *)sect)->sectname;
 		mysect.index = file->nsects;
 		if (!(lst = ft_lstnew(&mysect, sizeof(t_sect))))
-			return (errors(file->filename, "ERROR MEM !"));
+			return (errors(file->filename, MAP_ERROR));
 		ft_lstadd(&(file->sects), lst);
 		sect = sect + 1;
 	}
@@ -59,7 +59,7 @@ bool	manage_sections_64(t_file *file, void *lc)
 		mysect.name = ((struct section_64 *)sect)->sectname;
 		mysect.index = file->nsects;
 		if (!(lst = ft_lstnew(&mysect, sizeof(t_sect))))
-			return (errors(file->filename, "ERROR MEM !"));
+			return (errors(file->filename, MAP_ERROR));
 		ft_lstadd(&(file->sects), lst);
 		sect = sect + 1;
 	}

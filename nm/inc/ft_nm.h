@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:05:38 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:06:32 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/02 15:15:14 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,6 @@ typedef struct			s_file
 {
 	char				*filename;
 	void				*ptr;
-	uint32_t			off;
-	char				*content;
-	t_file_type			type;
 	int32_t				ncmds;
 	uint32_t			size;
 	bool				swap_bits;
