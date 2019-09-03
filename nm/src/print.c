@@ -48,12 +48,26 @@ static void		alpha_sort(t_sym *data[], uint32_t len)
 	}
 }
 
-void			print_nm(t_sym data[], uint32_t len, t_list *sects, bool is64)
+static	void	ft_putnstr(t_file *f, t_sym data)
+{
+	int i;
+
+	i = 0;
+	while (data.name[i] && (i + 1 + f->stroff + data.name_size) < f->size)
+		++i;
+	//ft_printf("I = %d\n", i);
+	//ft_printf("strname = %u\n", data.name_size);
+	//ft_printf("stroff = %u\n", f->stroff);
+	write(1, data.name, i);
+	ft_putchar('\n');
+}
+
+void			print_nm(t_sym data[], uint32_t len, t_file *f, bool is64)
 {
 	uint32_t	i;
 
 	alpha_sort(&data, len);
-	get_symbol_letter(data, sects, len);
+	get_symbol_letter(data, f->sects, len);
 	i = -1;
 	while (++i < len)
 	{
@@ -73,6 +87,7 @@ void			print_nm(t_sym data[], uint32_t len, t_list *sects, bool is64)
 			else
 				ft_printf("%9c", ' ');
 		}
-		ft_printf("%c %s\n", data[i].type_s, data[i].name);
+		ft_printf("%c ", data[i].type_s);
+		ft_putnstr(f, data[i]);
 	}
 }

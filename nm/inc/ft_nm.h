@@ -72,6 +72,7 @@ typedef struct			s_file
 	t_arch				arch;
 	uint64_t			nsects;
 	t_list				*sects;
+	uint32_t			stroff;
 }						t_file;
 
 bool					g_multi_file;
@@ -91,7 +92,7 @@ bool					output_32(struct symtab_command *sym, t_file *f, \
 bool					output_64(struct symtab_command *sym, t_file *f, \
 						uint32_t nsyms);
 
-void					print_nm(t_sym data[], uint32_t len, t_list *sects, \
+void					print_nm(t_sym data[], uint32_t len, t_file *f, \
 						bool is64);
 
 uint32_t				swap32(bool value, uint32_t n);
