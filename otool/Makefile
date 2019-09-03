@@ -22,10 +22,8 @@ SRCS		= $(addprefix $(PATH_SRC)/, \
 							get_arch_name.c\
 							archive.c\
 							output.c\
-							print.c\
 							sections.c\
 							swap.c\
-							symbol_type.c\
 							errors.c)
 
 ################################################################################

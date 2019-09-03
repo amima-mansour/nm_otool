@@ -53,29 +53,34 @@ typedef enum			e_arch
 	ARCH_64
 }						t_arch;
 
-typedef struct			s_sect
+typedef struct			s_sect_64
 {
-	char				*name;
-	uint64_t			index;
 	uint64_t			addr;
 	uint64_t			size;
 	uint32_t			offset;
-	char				*content;
-}						t_sect;
+}						t_sect_64;
+
+typedef struct			s_sect_32
+{
+	uint32_t			addr;
+	uint32_t			size;
+	uint32_t			offset;
+}						t_sect_32;
 
 typedef struct			s_file
 {
 	char				*filename;
 	void				*ptr;
+	bool				isfat;
 	int32_t				ncmds;
 	uint32_t			size;
 	bool				swap_bits;
 	t_arch				arch;
 	uint64_t			nsects;
-	t_list				*sects;
+	cpu_type_t      	cpu; 
+	t_sect_32			sect_32;
+	t_sect_64			sect_64;
 }						t_file;
-
-bool					g_multi_file;
 
 int						main(int argc, char **av);
 bool					otool(void *ptr, uint64_t size, char *name, char *arch);
@@ -87,13 +92,7 @@ bool					handle_fat_64(t_file *file);
 bool					manage_sections_32(t_file *file, void *lc);
 bool					manage_sections_64(t_file *file, void *lc);
 
-bool					output_32(struct symtab_command *sym, t_file *f, \
-						uint32_t nsyms);
-bool					output_64(struct symtab_command *sym, t_file *f, \
-						uint32_t nsyms);
-
-void					print_nm(t_sym data[], uint32_t len, t_list *sects, \
-						bool is64);
+bool					output(t_file *file, bool is64);
 
 uint32_t				swap32(bool value, uint32_t n);
 uint64_t				swap64(bool value, uint64_t n);
@@ -103,6 +102,4 @@ bool					errors(char *name, char *msg);
 
 char					*get_arch_name(cpu_type_t cpu_type, \
 						cpu_subtype_t cpu_subtype);
-void					get_symbol_letter(t_sym *sym, t_list *sects, \
-						uint32_t len);
 #endif

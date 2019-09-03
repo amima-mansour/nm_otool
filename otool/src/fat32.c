@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
 static bool		same_arch(t_file *f, struct fat_arch *a, uint32_t nfat, bool *e)
 {
@@ -58,7 +58,7 @@ static bool		all_arch(t_file *file, struct fat_arch *arch, uint32_t nfat)
 			return (errors(file->filename, CORRUPT_FILE));
 		cputype = swap32(file->swap_bits, arch->cputype);
 		cpusubtype = swap32(file->swap_bits, arch->cpusubtype);
-		ft_printf("\n%s (for architecture %s):\n", file->filename, \
+		ft_printf("%s (architecture %s):\nContents of (__TEXT,__text) section\n", file->filename, \
 				get_arch_name(cputype, cpusubtype));
 		if (otool(file->ptr + offset, size, file->filename, NULL))
 			return (true);

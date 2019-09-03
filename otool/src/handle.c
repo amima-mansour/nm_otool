@@ -10,12 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
 static bool	process_64(t_file *f, struct load_command *lc)
 {
 	int			i;
-	uint32_t	nsyms;
 	bool		err;
 
 	f->nsects = 0;
@@ -34,13 +33,13 @@ static bool	process_64(t_file *f, struct load_command *lc)
 		lc = (struct load_command *)iscorrup(f, (void*)lc + \
 				swap32(f->swap_bits, lc->cmdsize), sizeof(*lc));
 	}
+	output(f, true);
 	return (err);
 }
 
 static bool	process_32(t_file *f, struct load_command *lc)
 {
 	int			i;
-	uint32_t	nsyms;
 	bool		err;
 
 	f->nsects = 0;
@@ -57,6 +56,7 @@ static bool	process_32(t_file *f, struct load_command *lc)
 		lc = (struct load_command *)iscorrup(f, (void*)lc + \
 				swap32(f->swap_bits, lc->cmdsize), sizeof(*lc));
 	}
+	output(f, false);
 	return (err);
 }
 
@@ -65,13 +65,13 @@ bool		handle_mach_o(t_file *f)
 	struct mach_header_64	*hd64;
 	struct mach_header		*hd;
 	struct load_command		*lc;
-	cpu_type_t				cpu;
+
 
 	if (f->arch == ARCH_32)
 	{
 		if (!(hd = (struct mach_header *)iscorrup(f, f->ptr, sizeof(*hd))))
 			return (errors(f->filename, CORRUPT_FILE));
-		cpu = hd->cputype;
+		f->cpu = hd->cputype;
 		f->ncmds = swap32(f->swap_bits, hd->ncmds);
 		lc = (struct load_command *)iscorrup(f, \
 				(f->ptr + sizeof(*hd)), sizeof(*lc));
@@ -79,7 +79,7 @@ bool		handle_mach_o(t_file *f)
 	}
 	if (!(hd64 = (struct mach_header_64 *)iscorrup(f, f->ptr, sizeof(*hd64))))
 		return (errors(f->filename, CORRUPT_FILE));
-	cpu = hd->cputype;
+	f->cpu = hd64->cputype;
 	f->ncmds = swap32(f->swap_bits, hd64->ncmds);
 	lc = (struct load_command *)iscorrup(f, (f->ptr + \
 				sizeof(*hd64)), sizeof(*lc));

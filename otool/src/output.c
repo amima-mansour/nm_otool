@@ -10,62 +10,68 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
-bool	output_32(struct symtab_command *sym, t_file *f, uint32_t nsyms)
+static void custom_print(t_file *file, uint64_t index, bool is64, int64_t size)
 {
-	char			*str;
-	struct nlist	*table;
-	uint32_t		i;
-	t_sym			data[nsyms];
+	int 		j;
+	void 		*offset;
+	uint32_t	text_off;
 
-	if (!(table = (struct nlist *)iscorrup(f, (void *)f->ptr + \
-					swap32(f->swap_bits, sym->symoff), sizeof(*table) * nsyms)))
-		return (errors(f->filename, CORRUPT_FILE));
-	if (!(str = (char*)iscorrup(f, (void*)f->ptr + \
-					swap32(f->swap_bits, sym->stroff), sizeof(*str))))
-		return (errors(f->filename, CORRUPT_FILE));
-	i = -1;
-	while (++i < nsyms)
+	j = -1;
+	text_off = (is64) ? file->sect_64.offset : file->sect_32.offset; 
+	while (++j < 16)
 	{
-		data[i].name = (char*)iscorrup(f, str + swap32(f->swap_bits, \
-					table[i].n_un.n_strx), sizeof(*(data[i].name)));
-		data[i].name = (!(data[i].name)) ? BAD_STRING : data[i].name;
-		data[i].type = table[i].n_type;
-		data[i].value = swap32(f->swap_bits, table[i].n_value);
-		data[i].sect = table[i].n_sect;
-		data[i].desc = table[i].n_desc;
+		offset = (void *)file->ptr + text_off + j + index;
+		if (offset >= (void*)file->ptr + text_off + size)
+			return ;
+		ft_printf("%-3.2hhx", (uint8_t)swap32(file->swap_bits, *(uint32_t*)offset));
 	}
-	(g_multi_file) ? ft_printf("\n%s:\n", f->filename) : 0;
-	print_nm(data, nsyms, f->sects, false);
-	return (false);
 }
 
-bool	output_64(struct symtab_command *sym, t_file *f, uint32_t nsyms)
+static void compact_print(t_file *file, uint64_t index, bool is64, int64_t size)
 {
-	char			*str;
-	struct nlist_64	*table;
-	uint32_t		i;
-	t_sym			data[nsyms];
+	int			j;
+	void 		*offset;
+	uint32_t	text_off;
 
-	i = -1;
-	if (!(table = (struct nlist_64 *)iscorrup(f, (void *)f->ptr + \
-					swap32(f->swap_bits, sym->symoff), sizeof(*table) * nsyms)))
-		return (errors(f->filename, CORRUPT_FILE));
-	if (!(str = (char*)iscorrup(f, (void*)f->ptr + \
-					swap32(f->swap_bits, sym->stroff), sizeof(*str))))
-		return (errors(f->filename, CORRUPT_FILE));
-	while (++i < nsyms)
+	j = 0;
+	text_off = (is64) ? file->sect_64.offset : file->sect_32.offset; 
+	while (j < 16)
 	{
-		data[i].name = (char*)iscorrup(f, str + swap32(f->swap_bits, \
-					table[i].n_un.n_strx), sizeof(*data[i].name));
-		data[i].name = (!(data[i].name)) ? BAD_STRING : data[i].name;
-		data[i].type = table[i].n_type;
-		data[i].value = swap64(f->swap_bits, table[i].n_value);
-		data[i].sect = table[i].n_sect;
-		data[i].desc = table[i].n_desc;
+		offset = (void *)file->ptr + text_off + index + j;
+		if (offset >= (void*)file->ptr + text_off + size)
+			return ;
+		ft_printf("%-9.8x", (uint32_t)swap32(file->swap_bits, *(uint32_t *)offset));
+        j += 4;
 	}
-	(g_multi_file) ? ft_printf("\n%s:\n", f->filename) : 0;
-	print_nm(data, nsyms, f->sects, true);
+}
+
+bool	output(t_file *f, bool is64)
+{
+	void		*offset;
+	uint64_t	i;
+	uint64_t	size;
+
+	size = (is64) ? f->sect_64.size : f->sect_32.size;
+	offset = (is64) ? (void *)f->ptr + f->sect_64.offset
+	: (void *)f->ptr + f->sect_32.offset;
+	if (iscorrup(f, offset, size) == NULL)
+		return (errors(f->filename, CORRUPT_FILE));
+	i = 0;
+	while (i < size)
+	{
+		if (is64)
+			ft_printf("%.16llx\t", f->sect_64.addr + i);
+		else
+			ft_printf("%.8llx\t", f->sect_32.addr + i);
+		if (f->cpu == CPU_TYPE_X86 || f->cpu == CPU_TYPE_X86_64 
+			|| f->cpu == CPU_TYPE_I386)
+			custom_print(f, i, is64, size);
+		else
+			compact_print(f, i, is64, size);
+		ft_putchar('\n');
+		i += 16;
+	}
 	return (false);
 }

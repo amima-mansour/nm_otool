@@ -20,9 +20,32 @@ static t_file	init_file(char *filename, char *name, uint64_t size, void *ptr)
 	file.size = size;
 	file.filename = filename;
 	if (name)
-		ft_printf("\n%s(%s):\n", name, filename);
+		ft_printf("%s(%s):\nContents of (__TEXT,__text) section\n", name, filename);
 	return (file);
 }
+
+// static void		ft_putstr_filename(t_file file, uint32_t magic, char *name)
+// {
+// 	if (magic_nb == FAT_MAGIC_64 || magic_nb == FAT_CIGAM_64 ||)
+// 	if (ft_strncmp((char *)file.ptr, ARMAG, SARMAG) == 0)
+// 		ft_printf("Archive : %s\n", file.filename);
+// 	else if (name)
+// 	//	ft_printf("%s:\nContents of (__TEXT,__text) section\n", filename);
+// 	//else
+// 		ft_printf("%s(%s):\nContents of (__TEXT,__text) section\n", name, filename);
+// 	else if
+
+// }
+
+// static t_file	init_file(char *filename, uint64_t size, void *ptr)
+// {
+// 	t_file file;
+
+// 	file.ptr = ptr;
+// 	file.size = size;
+// 	file.filename = filename;
+// 	return (file);
+// }
 
 bool			otool(void *ptr, uint64_t size, char *filename, char *archive)
 {
@@ -78,7 +101,7 @@ int				main(int ac, char **av)
 	int		i;
 
 	i = 0;
-	g_multi_file = ac > 2;
+
 	if (ac < 2)
 	{
 		if ((fd = open(DEFAULT_FILE, O_RDONLY)) < 0)

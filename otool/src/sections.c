@@ -10,13 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
 bool	manage_sections_32(t_file *file, void *lc)
 {
 	struct section	*sect;
-	t_sect			mysect;
-	t_list			*lst;
 	uint32_t		nsects;
 	uint32_t		i;
 
@@ -28,15 +26,12 @@ bool	manage_sections_32(t_file *file, void *lc)
 	{
 		if (!sect)
 			return (errors(file->filename, CORRUPT_FILE));
-		if (sect->sectname == " " && sect->segname == "")
+		if (ft_strcmp(sect->sectname, "__text") == 0)
 		{
-			mysect.offset = sect->offset;
-			mysect.size = sect->size;
-			mysect.addr = sect->addr;
+			file->sect_32.offset = swap32(file->swap_bits, sect->offset);
+			file->sect_32.size = swap32(file->swap_bits, sect->size);
+			file->sect_32.addr = swap32(file->swap_bits, sect->addr);
 		}
-		if (!(lst = ft_lstnew(&mysect, sizeof(t_sect))))
-			return (errors(file->filename, MAP_ERROR));
-		ft_lstadd(&(file->sects), lst);
 		sect = sect + 1;
 	}
 	return (false);
@@ -45,8 +40,6 @@ bool	manage_sections_32(t_file *file, void *lc)
 bool	manage_sections_64(t_file *file, void *lc)
 {
 	struct section_64		*sect;
-	t_sect					mysect;
-	t_list					*lst;
 	uint32_t				nsects;
 	uint32_t				i;
 
@@ -58,12 +51,12 @@ bool	manage_sections_64(t_file *file, void *lc)
 	{
 		if (!sect)
 			return (errors(file->filename, CORRUPT_FILE));
-		file->nsects++;
-		mysect.name = ((struct section_64 *)sect)->sectname;
-		mysect.index = file->nsects;
-		if (!(lst = ft_lstnew(&mysect, sizeof(t_sect))))
-			return (errors(file->filename, MAP_ERROR));
-		ft_lstadd(&(file->sects), lst);
+		if (ft_strcmp(sect->sectname, "__text") == 0)
+		{
+			file->sect_64.offset = swap32(file->swap_bits, sect->offset);
+			file->sect_64.size = swap64(file->swap_bits, sect->size);
+			file->sect_64.addr = swap64(file->swap_bits, sect->addr);
+		}
 		sect = sect + 1;
 	}
 	return (false);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include "ft_otool.h"
 
 void			*iscorrup(t_file *file, void *ptr, uint64_t size)
 {
