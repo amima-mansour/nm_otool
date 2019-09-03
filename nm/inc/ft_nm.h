@@ -39,7 +39,7 @@
 typedef struct			s_sym
 {
 	char				*name;
-	uint32_t			name_size;
+	uint32_t			strname;
 	uint64_t			value;
 	uint8_t				type;
 	uint8_t				sect;
