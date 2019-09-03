@@ -35,6 +35,7 @@
 # define DIR			"Is a directory"
 # define OPEN_ERROR		"Open file"
 # define FSTAT_ERROR	"Fstat Error"
+# define FAT			"FAT"
 
 typedef struct			s_sym
 {
@@ -71,7 +72,6 @@ typedef struct			s_file
 {
 	char				*filename;
 	void				*ptr;
-	bool				isfat;
 	int32_t				ncmds;
 	uint32_t			size;
 	bool				swap_bits;

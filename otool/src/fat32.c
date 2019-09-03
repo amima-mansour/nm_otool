@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 10:56:33 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:59:15 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/03 15:12:36 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static bool		same_arch(t_file *f, struct fat_arch *a, uint32_t nfat, bool *e)
 	return (false);
 }
 
-static bool		all_arch(t_file *file, struct fat_arch *arch, uint32_t nfat)
+static bool		all_arch(t_file *f, struct fat_arch *arch, uint32_t nfat)
 {
 	cpu_type_t		cputype;
 	cpu_subtype_t	cpusubtype;
@@ -51,18 +51,19 @@ static bool		all_arch(t_file *file, struct fat_arch *arch, uint32_t nfat)
 	while (nfat--)
 	{
 		if (!arch)
-			return (errors(file->filename, CORRUPT_FILE));
-		offset = swap32(file->swap_bits, arch->offset);
-		size = swap32(file->swap_bits, arch->size);
-		if (!iscorrup(file, file->ptr + offset, size))
-			return (errors(file->filename, CORRUPT_FILE));
-		cputype = swap32(file->swap_bits, arch->cputype);
-		cpusubtype = swap32(file->swap_bits, arch->cpusubtype);
-		ft_printf("%s (architecture %s):\nContents of (__TEXT,__text) section\n", file->filename, \
+			return (errors(f->filename, CORRUPT_FILE));
+		offset = swap32(f->swap_bits, arch->offset);
+		size = swap32(f->swap_bits, arch->size);
+		if (!iscorrup(f, f->ptr + offset, size))
+			return (errors(f->filename, CORRUPT_FILE));
+		cputype = swap32(f->swap_bits, arch->cputype);
+		cpusubtype = swap32(f->swap_bits, arch->cpusubtype);
+		ft_printf("%s (architecture %s):\n", f->filename, \
 				get_arch_name(cputype, cpusubtype));
-		if (otool(file->ptr + offset, size, file->filename, NULL))
+		ft_printf("Contents of (__TEXT,__text) section\n");
+		if (otool(f->ptr + offset, size, f->filename, FAT))
 			return (true);
-		arch = (struct fat_arch *)iscorrup(file, arch + 1, sizeof(*arch));
+		arch = (struct fat_arch *)iscorrup(f, arch + 1, sizeof(*arch));
 	}
 	return (false);
 }

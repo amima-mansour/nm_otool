@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 10:43:26 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:58:27 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/03 14:56:52 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static	bool		list_all(t_file *f, struct ranlib *ran, uint32_t r_size, \
 		size = ft_atoi(hd->ar_size);
 		if (iscorrup(f, (void *)n, size) == NULL)
 			return (errors(f->filename, CORRUPT_FILE));
-		if (otool((void *)n + extract_padding(hd->ar_name), size, n, f->filename))
+		if (otool((void *)n + extract_padding(hd->ar_name), size, \
+					n, f->filename))
 			return (true);
 		hd = iscorrup(f, (void *)hd + sizeof(*hd) + size, sizeof(*hd));
 	}

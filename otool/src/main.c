@@ -6,54 +6,49 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:10:25 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:55:59 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/03 15:09:18 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_otool.h"
 
-static t_file	init_file(char *filename, char *name, uint64_t size, void *ptr)
+static void		ft_putstr_name(t_file f, char *name, uint32_t magic)
+{
+	if (magic == FAT_MAGIC_64 || magic == FAT_CIGAM_64)
+		return ;
+	if (magic == FAT_MAGIC || magic == FAT_CIGAM)
+		return ;
+	if (ft_strncmp((char *)f.ptr, ARMAG, SARMAG) == 0)
+		ft_printf("Archive : %s\n", f.filename);
+	else if (!name)
+		ft_printf("%s:\nContents of (__TEXT,__text) section\n", f.filename);
+	else if (ft_strcmp(name, FAT) == 0)
+		return ;
+	else
+	{
+		ft_printf("%s(%s):\n", name, f.filename);
+		ft_printf("Contents of (__TEXT,__text) section\n");
+	}
+}
+
+static t_file	init_file(char *filename, uint64_t size, void *ptr)
 {
 	t_file file;
 
 	file.ptr = ptr;
 	file.size = size;
 	file.filename = filename;
-	if (name)
-		ft_printf("%s(%s):\nContents of (__TEXT,__text) section\n", name, filename);
 	return (file);
 }
 
-// static void		ft_putstr_filename(t_file file, uint32_t magic, char *name)
-// {
-// 	if (magic_nb == FAT_MAGIC_64 || magic_nb == FAT_CIGAM_64 ||)
-// 	if (ft_strncmp((char *)file.ptr, ARMAG, SARMAG) == 0)
-// 		ft_printf("Archive : %s\n", file.filename);
-// 	else if (name)
-// 	//	ft_printf("%s:\nContents of (__TEXT,__text) section\n", filename);
-// 	//else
-// 		ft_printf("%s(%s):\nContents of (__TEXT,__text) section\n", name, filename);
-// 	else if
-
-// }
-
-// static t_file	init_file(char *filename, uint64_t size, void *ptr)
-// {
-// 	t_file file;
-
-// 	file.ptr = ptr;
-// 	file.size = size;
-// 	file.filename = filename;
-// 	return (file);
-// }
-
-bool			otool(void *ptr, uint64_t size, char *filename, char *archive)
+bool			otool(void *ptr, uint64_t size, char *filename, char *name)
 {
 	uint32_t	magic_nb;
 	t_file		file;
 
 	magic_nb = *(uint32_t*)((uintptr_t)(ptr));
-	file = init_file(filename, archive, size, ptr);
+	file = init_file(filename, size, ptr);
+	ft_putstr_name(file, name, magic_nb);
 	file.swap_bits = is_swap(magic_nb);
 	if (magic_nb == MH_MAGIC_64 || magic_nb == MH_CIGAM_64)
 	{
@@ -101,7 +96,6 @@ int				main(int ac, char **av)
 	int		i;
 
 	i = 0;
-
 	if (ac < 2)
 	{
 		if ((fd = open(DEFAULT_FILE, O_RDONLY)) < 0)

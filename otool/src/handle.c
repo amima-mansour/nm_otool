@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 10:15:41 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 16:07:50 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/03 15:06:03 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ bool		handle_mach_o(t_file *f)
 	struct mach_header_64	*hd64;
 	struct mach_header		*hd;
 	struct load_command		*lc;
-
 
 	if (f->arch == ARCH_32)
 	{

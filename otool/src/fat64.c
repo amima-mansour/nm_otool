@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 11:05:51 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 16:00:12 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/03 15:13:19 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static bool	all_arch(t_file *f, struct fat_arch_64 *a, uint32_t nfat)
 	uint32_t		i;
 	uint64_t		offset;
 	uint64_t		size;
+	char			*arch_name;
 
 	i = -1;
 	while (++i < nfat)
@@ -56,10 +57,11 @@ static bool	all_arch(t_file *f, struct fat_arch_64 *a, uint32_t nfat)
 		size = swap64(f->swap_bits, a->size);
 		if (!iscorrup(f, f->ptr + offset, size))
 			return (errors(f->filename, CORRUPT_FILE));
-		ft_printf("%s (architecture %s):\nContents of (__TEXT,__text) section\n", f->filename, \
-				get_arch_name(swap32(f->swap_bits, a->cputype), \
-					swap32(f->swap_bits, a->cpusubtype)));
-		if (otool(f->ptr + offset, size, f->filename, NULL))
+		arch_name = get_arch_name(swap32(f->swap_bits, a->cputype),\
+				swap32(f->swap_bits, a->cpusubtype));
+		ft_printf("%s (architecture %s):\n", f->filename, arch_name);
+		ft_printf("Contents of (__TEXT,__text) section\n");
+		if (otool(f->ptr + offset, size, f->filename, FAT))
 			return (true);
 		a = (struct fat_arch_64 *)iscorrup(f, a + 1, sizeof(*a));
 	}
