@@ -23,9 +23,13 @@ SRCS		= $(addprefix $(PATH_SRC)/, \
 							archive.c\
 							output.c\
 							print.c\
+							flags.c\
 							sections.c\
 							swap.c\
 							symbol_type.c\
+							sort.c\
+							alpha_sort.c\
+							num_sort.c\
 							errors.c)
 
 ################################################################################

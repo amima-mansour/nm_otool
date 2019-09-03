@@ -28,3 +28,15 @@ bool			errors(char *filename, char *msg)
 	ft_putchar_fd('\n', 2);
 	return (true);
 }
+
+int				usage(void)
+{
+	ft_putendl_fd("./ft_nm: illegal option", 2);
+	ft_putendl_fd("usage: ./ft_nm [-npruU] binary_file [...]", 2);
+	ft_putendl_fd("  -n : sort numerically rather than alphabetically", 2);
+	ft_putendl_fd("  -p : don't sort; display in symbol-table order", 2);
+	ft_putendl_fd("  -r : sort in reverse order", 2);
+	ft_putendl_fd("  -u : display only undefined symbols", 2);
+	ft_putendl_fd("  -U : don't display undefined symbols", 2);
+	return (EXIT_FAILURE);
+}

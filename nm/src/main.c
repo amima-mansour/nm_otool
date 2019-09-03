@@ -51,12 +51,15 @@ bool			nm(void *ptr, uint64_t size, char *filename, char *archive)
 	return (errors(filename, NOT_VALID));
 }
 
-static bool		treat_file(int fd, char *name)
+static bool		treat_file(char *name)
 {
 	struct stat	buf;
 	void		*ptr;
 	bool		value;
+	int			fd;
 
+	if ((fd = open(name, O_RDONLY)) < 0)
+		return (errors(name, OPEN_ERROR));
 	if ((fstat(fd, &buf)) < 0)
 		return (errors(name, FSTAT_ERROR));
 	if (S_ISDIR(buf.st_mode))
@@ -74,27 +77,19 @@ static bool		treat_file(int fd, char *name)
 
 int				main(int ac, char **av)
 {
-	int		fd;
-	int		i;
+	bool	err;
 
-	i = 0;
-	g_multi_file = ac > 2;
 	if (ac < 2)
+		err = treat_file(DEFAULT_FILE);
+	if (ac > 2 && get_flags(&ac, &av))
+		return (usage());
+	g_multi_file = ac > 2;
+	while (--ac)
 	{
-		if ((fd = open(DEFAULT_FILE, O_RDONLY)) < 0)
-			errors(DEFAULT_FILE, OPEN_ERROR);
-		if (fd < 0 || treat_file(fd, DEFAULT_FILE))
-			return (EXIT_FAILURE);
+		av++;
+		err = treat_file(*av);
 	}
-	while (++i < ac)
-	{
-		if ((fd = open(av[i], O_RDONLY)) < 0)
-		{
-			errors(av[i], OPEN_ERROR);
-			return (EXIT_FAILURE);
-		}
-		if (treat_file(fd, av[i]))
-			return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
+	if (!err)
+		return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }

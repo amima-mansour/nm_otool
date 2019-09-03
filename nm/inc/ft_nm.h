@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:05:38 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:37:43 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/03 08:19:41 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@
 # define DIR			"Is a directory"
 # define OPEN_ERROR		"Open file"
 # define FSTAT_ERROR	"Fstat Error"
+# define OPTIONS		"prunU"
+# define P_FLAG			1
+# define N_FLAG			2
+# define R_FLAG			4
+# define U_FLAG			8
+# define BIGU_FLAG		16
+
 
 typedef struct			s_sym
 {
@@ -76,9 +83,16 @@ typedef struct			s_file
 }						t_file;
 
 bool					g_multi_file;
+int						g_flags;
 
 int						main(int argc, char **av);
 bool					nm(void *ptr, uint64_t size, char *name, char *arch);
+
+int						get_flags(int *argc, char ***argv);
+int						usage(void);
+void					sort(t_sym *data[], uint32_t len);
+void		    		alpha_sort(t_sym *data[], uint32_t len, bool rev);
+void		    		num_sort(t_sym *data[], uint32_t len, bool rev);
 
 bool					handle_mach_o(t_file *file);
 bool					handle_archive(t_file *file);
