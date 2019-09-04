@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:12:03 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:20:41 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/04 13:54:39 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,10 @@ void			get_symbol_letter(t_sym *data, t_list *sects, uint32_t len)
 	}
 	while (sects)
 	{
-		tmp = sects->next;
-		free(sects->content);
-		free(sects);
-		sects = tmp;
+		tmp = sects;
+		sects = sects->next;
+		free(tmp->content);
+		free(tmp);
+		tmp = NULL;
 	}
 }

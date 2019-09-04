@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:05:38 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/03 08:19:41 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/04 12:40:08 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@
 # define R_FLAG			4
 # define U_FLAG			8
 # define BIGU_FLAG		16
-
 
 typedef struct			s_sym
 {
@@ -91,8 +90,8 @@ bool					nm(void *ptr, uint64_t size, char *name, char *arch);
 int						get_flags(int *argc, char ***argv);
 int						usage(void);
 void					sort(t_sym *data[], uint32_t len);
-void		    		alpha_sort(t_sym *data[], uint32_t len, bool rev);
-void		    		num_sort(t_sym *data[], uint32_t len, bool rev);
+void					alpha_sort(t_sym *data[], uint32_t len, bool rev);
+void					num_sort(t_sym *data[], uint32_t len, bool rev);
 
 bool					handle_mach_o(t_file *file);
 bool					handle_archive(t_file *file);

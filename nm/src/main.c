@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:10:25 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:33:38 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/04 13:54:13 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static t_file	init_file(char *filename, char *name, uint64_t size, void *ptr)
 
 	file.ptr = ptr;
 	file.size = size;
+	file.sects = NULL;
 	file.filename = filename;
 	if (name)
 		ft_printf("\n%s(%s):\n", name, filename);
