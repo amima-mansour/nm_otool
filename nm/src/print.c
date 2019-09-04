@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 11:22:28 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/04 12:40:23 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/04 15:05:08 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,14 @@ static	void	ft_putnstr(t_file *f, t_sym data)
 		return ;
 	if (!(g_flags & U_FLAG))
 		ft_printf("%c ", data.type_s);
+	if (ft_strcmp(data.name, BAD_STRING) == 0)
+	{
+		ft_printf("%s\n", data.name);
+		return ;
+	}
 	while (data.name[i] && (i + 1 + f->stroff + data.strname) < f->size)
 		++i;
 	write(1, data.name, i);
-	if (data.type_s == 'I')
-	{
-		ft_printf(" (indirect for ");
-		write(1, data.name, i);
-		ft_printf(")");
-	}
 	ft_putchar('\n');
 }
 
