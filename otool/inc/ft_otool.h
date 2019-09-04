@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 15:53:10 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 16:09:46 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/04 16:06:48 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct			s_file
 	bool				swap_bits;
 	t_arch				arch;
 	uint64_t			nsects;
-	cpu_type_t      	cpu; 
+	cpu_type_t			cpu;
 	t_sect_32			sect_32;
 	t_sect_64			sect_64;
 }						t_file;
