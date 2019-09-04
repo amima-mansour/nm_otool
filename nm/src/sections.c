@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 10:16:07 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/02 15:19:12 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/04 11:24:58 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	manage_sections_32(t_file *file, void *lc)
 	i = -1;
 	while (++i < nsects)
 	{
-		if (!sect)
+		if (!sect || sect->size > ((struct segment_command *)lc)->vmsize)
 			return (errors(file->filename, CORRUPT_FILE));
 		file->nsects++;
 		mysect.name = ((struct section *)sect)->sectname;
@@ -53,7 +53,7 @@ bool	manage_sections_64(t_file *file, void *lc)
 	i = -1;
 	while (++i < nsects)
 	{
-		if (!sect)
+		if (!sect || sect->size > ((struct segment_command_64*)lc)->vmsize)
 			return (errors(file->filename, CORRUPT_FILE));
 		file->nsects++;
 		mysect.name = ((struct section_64 *)sect)->sectname;
