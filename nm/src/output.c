@@ -6,18 +6,30 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:07:41 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/04 15:05:31 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/07 15:06:57 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-bool	output_32(struct symtab_command *sym, t_file *f, uint32_t nsyms)
+static void		add_sym(t_list **symlst, t_sym data, char *filename)
+{
+	t_list			*lst;
+
+	if (!(lst = ft_lstnew(&data, sizeof(t_sym))))
+	{
+		errors(filename, MAP_ERROR);
+		exit(0);
+	}
+	ft_lstadd(symlst, lst);
+}
+
+bool			output_32(struct symtab_command *sym, t_file *f, uint32_t nsyms)
 {
 	char			*str;
 	struct nlist	*table;
 	uint32_t		i;
-	t_sym			d[nsyms];
+	t_sym			d;
 
 	if (!(table = (struct nlist *)iscorrup(f, (void *)f->ptr + \
 					swap32(f->swap_bits, sym->symoff), sizeof(*table) * nsyms)))
@@ -28,25 +40,25 @@ bool	output_32(struct symtab_command *sym, t_file *f, uint32_t nsyms)
 	i = -1;
 	while (++i < nsyms)
 	{
-		d[i].strname = swap32(f->swap_bits, table[i].n_un.n_strx);
-		d[i].name = (char*)iscorrup(f, str + d[i].strname, sizeof(*d[i].name));
-		d[i].name = (!(d[i].name)) ? BAD_STRING : d[i].name;
-		d[i].type = table[i].n_type;
-		d[i].value = swap32(f->swap_bits, table[i].n_value);
-		d[i].sect = table[i].n_sect;
-		d[i].desc = table[i].n_desc;
+		d.strname = swap32(f->swap_bits, table[i].n_un.n_strx);
+		d.name = (char*)iscorrup(f, str + d.strname, sizeof(*d.name));
+		d.name = (!(d.name)) ? BAD_STRING : d.name;
+		d.type = table[i].n_type;
+		d.value = swap32(f->swap_bits, table[i].n_value);
+		d.sect = table[i].n_sect;
+		d.index = i;
+		add_sym(&(f->syms), d, f->filename);
 	}
-	(g_multi_file) ? ft_printf("\n%s:\n", f->filename) : 0;
-	print_nm(d, nsyms, f, false);
+	print_nm(f, false);
 	return (false);
 }
 
-bool	output_64(struct symtab_command *sym, t_file *f, uint32_t nsyms)
+bool			output_64(struct symtab_command *sym, t_file *f, uint32_t nsyms)
 {
 	char			*str;
 	struct nlist_64	*table;
 	uint32_t		i;
-	t_sym			d[nsyms];
+	t_sym			d;
 
 	if (!(table = (struct nlist_64 *)iscorrup(f, (void *)f->ptr + \
 					swap32(f->swap_bits, sym->symoff), sizeof(*table) * nsyms)))
@@ -57,15 +69,15 @@ bool	output_64(struct symtab_command *sym, t_file *f, uint32_t nsyms)
 	i = -1;
 	while (++i < nsyms)
 	{
-		d[i].strname = swap32(f->swap_bits, table[i].n_un.n_strx);
-		d[i].name = (char*)iscorrup(f, str + d[i].strname, sizeof(*d[i].name));
-		d[i].name = (!(d[i].name)) ? BAD_STRING : d[i].name;
-		d[i].type = table[i].n_type;
-		d[i].value = swap64(f->swap_bits, table[i].n_value);
-		d[i].sect = table[i].n_sect;
-		d[i].desc = table[i].n_desc;
+		d.strname = swap32(f->swap_bits, table[i].n_un.n_strx);
+		d.name = (char*)iscorrup(f, str + d.strname, sizeof(*d.name));
+		d.name = (!(d.name)) ? BAD_STRING : d.name;
+		d.type = table[i].n_type;
+		d.value = swap64(f->swap_bits, table[i].n_value);
+		d.sect = table[i].n_sect;
+		d.index = i;
+		add_sym(&(f->syms), d, f->filename);
 	}
-	(g_multi_file) ? ft_printf("\n%s:\n", f->filename) : 0;
-	print_nm(d, nsyms, f, true);
+	print_nm(f, true);
 	return (false);
 }

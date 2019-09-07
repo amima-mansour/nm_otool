@@ -12,49 +12,48 @@
 
 #include "ft_nm.h"
 
-static uint32_t	select_num_min(t_sym data[], uint32_t start, uint32_t finish)
+static t_list	*select_num_min(t_list *data)
 {
-	uint32_t index;
-	uint32_t i;
+	t_list		*el;
 
-	index = start;
-	i = start;
-	while (++i <= finish)
+	el = data;
+	while (data)
 	{
-		if (data[i].value < data[index].value)
-			index = i;
+		if (((t_sym *)(data->content))->value < ((t_sym *)(el->content))->value)
+			el = data;
+		data = data->next;
 	}
-	return (index);
+	return (el);
 }
 
-static uint32_t	select_num_max(t_sym data[], uint32_t start, uint32_t finish)
+static t_list	*select_num_max(t_list *data)
 {
-	uint32_t index;
-	uint32_t i;
+	t_list		*el;
 
-	index = start;
-	i = start;
-	while (++i <= finish)
+	el = data;
+	while (data)
 	{
-		if (data[i].value > data[index].value)
-			index = i;
+		if (((t_sym *)(data->content))->value > ((t_sym *)(el->content))->value)
+			el = data;
+		data = data->next;
 	}
-	return (index);
+	return (el);
 }
 
-void			num_sort(t_sym *data[], uint32_t len, bool rev)
+void			num_sort(t_list **syms, bool rev)
 {
-	uint32_t	i;
-	t_sym		tmp;
-	uint32_t	index;
+	t_list		*lst;
+	t_list		*sort;
 
-	i = -1;
-	while (++i < (len - 1))
+	sort = NULL;
+	while ((*syms)->next)
 	{
-		index = (rev) ? select_num_max(*data, i, len - 1) : \
-				select_num_min(*data, i, len - 1);
-		tmp = (*data)[i];
-		(*data)[i] = (*data)[index];
-		(*data)[index] = tmp;
+		lst = (rev) ? select_num_max(*syms) : \
+				select_num_min(*syms);
+		remove_lst(syms, lst);
+		lst->next = NULL;
+		add_list(&sort, lst);
 	}
+	add_list(&sort, *syms);
+	*syms = sort;
 }

@@ -1,28 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort.c                                             :+:      :+:    :+:   */
+/*   lst_tools.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/03 10:01:02 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/03 10:01:22 by amansour         ###   ########.fr       */
+/*   Created: 2019/09/07 14:27:00 by amansour          #+#    #+#             */
+/*   Updated: 2019/09/07 14:27:35 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-void		sort(t_list **data)
+void		free_list(t_list *lst)
 {
-	bool rev;
+	t_list		*tmp;
 
-	rev = false;
-	if (g_flags & P_FLAG)
-		return ;
-	if (g_flags & R_FLAG)
-		rev = 1;
-	if (g_flags & N_FLAG)
-		num_sort(data, rev);
+	while (lst)
+	{
+		tmp = lst;
+		lst = lst->next;
+		free(tmp->content);
+		free(tmp);
+		tmp = NULL;
+	}
+}
+
+void		add_list(t_list **l, t_list *lst)
+{
+	t_list	*tmp;
+	t_list	*prev;
+
+	prev = NULL;
+	tmp = *l;
+	while (tmp)
+	{
+		prev = tmp;
+		tmp = tmp->next;
+	}
+	if (prev)
+		prev->next = lst;
 	else
-		alpha_sort(data, rev);
+		*l = lst;
 }

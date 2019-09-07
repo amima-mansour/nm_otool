@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 14:10:25 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/03 15:09:18 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/05 09:33:57 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,8 @@ int				main(int ac, char **av)
 	i = 0;
 	if (ac < 2)
 	{
-		if ((fd = open(DEFAULT_FILE, O_RDONLY)) < 0)
-			errors(DEFAULT_FILE, OPEN_ERROR);
-		if (fd < 0 || treat_file(fd, DEFAULT_FILE))
-			return (EXIT_FAILURE);
+		write(2, "Usage: ./ft_otool binary_file [...] \n", 38);
+		return (EXIT_FAILURE);
 	}
 	while (++i < ac)
 	{

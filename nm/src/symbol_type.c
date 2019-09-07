@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:12:03 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/04 13:54:39 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/07 15:15:44 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,16 @@ static void		match_symbol_section(t_list *sect_lst, t_sym *sym)
 	}
 }
 
-static void		get_single_symbol(t_sym *sym, t_list *sects)
+static void		get_single_symbol(t_list **lst, t_list *sects)
 {
+	t_sym *sym;
+
+	sym = ((t_sym*)((*lst)->content));
 	sym->type_s = '?';
 	if (N_STAB & sym->type)
 		sym->type_s = '-';
 	else if ((N_TYPE & sym->type) == N_UNDF && \
-			sym->value != 0 && (sym->type & N_EXT))
+			sym->value != 0 && sym->type & N_EXT)
 		sym->type_s = 'C';
 	else if ((N_TYPE & sym->type) == N_UNDF && (sym->type & N_EXT))
 		sym->type_s = 'U';
@@ -60,23 +63,17 @@ static void		get_single_symbol(t_sym *sym, t_list *sects)
 		sym->type_s = ft_tolower(sym->type_s);
 }
 
-void			get_symbol_letter(t_sym *data, t_list *sects, uint32_t len)
+void			get_symbol_letter(t_list *data, t_list *sects)
 {
 	uint32_t	i;
 	t_list		*tmp;
 
 	i = 0;
-	while (i < len)
+	tmp = data;
+	while (tmp)
 	{
-		get_single_symbol(&(data[i]), sects);
-		i++;
+		get_single_symbol(&tmp, sects);
+		tmp = tmp->next;
 	}
-	while (sects)
-	{
-		tmp = sects;
-		sects = sects->next;
-		free(tmp->content);
-		free(tmp);
-		tmp = NULL;
-	}
+	free_list(sects);
 }

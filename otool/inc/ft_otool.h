@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 15:53:10 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/04 16:06:48 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/05 09:40:51 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # include <stdbool.h>
 # include "../../libft/inc/libft.h"
 
-# define DEFAULT_FILE	"a.out"
 # define BAD_STRING		"bad string index"
 # define CORRUPT_FILE	"truncated or malformed object"
 # define NOT_VALID		"The file was not recognized as a valid object file"
@@ -33,7 +32,7 @@
 # define MUN_ERROR		"Munmap error"
 # define CLOSE_ERROR	"Close error"
 # define DIR			"Is a directory"
-# define OPEN_ERROR		"Open file"
+# define OPEN_ERROR		"No such file or directory"
 # define FSTAT_ERROR	"Fstat Error"
 # define FAT			"FAT"
 

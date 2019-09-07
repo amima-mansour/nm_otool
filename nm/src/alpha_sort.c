@@ -6,65 +6,92 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 09:59:32 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/03 10:00:08 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/07 14:29:35 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
 
-static uint32_t	select_alpha_min(t_sym data[], uint32_t start, uint32_t finish)
+static t_list	*select_alpha_min(t_list *data)
 {
-	uint32_t index;
-	uint32_t i;
+	t_list		*el;
 
-	index = start;
-	i = start;
-	while (++i <= finish)
+	el = data;
+	while (data)
 	{
-		if (ft_strcmp(data[i].name, data[index].name) < 0)
-			index = i;
-		if (ft_strcmp(data[i].name, data[index].name) == 0)
+		if (ft_strcmp(((t_sym *)(data->content))->name, \
+		((t_sym *)(el->content))->name) < 0)
+			el = data;
+		if (ft_strcmp(((t_sym *)(data->content))->name, \
+		((t_sym *)(el->content))->name) == 0)
 		{
-			if (data[i].value < data[index].value)
-				index = i;
+			if (((t_sym *)(data->content))->value < \
+			((t_sym *)(el->content))->value)
+				el = data;
 		}
+		data = data->next;
 	}
-	return (index);
+	return (el);
 }
 
-static uint32_t	select_alpha_max(t_sym data[], uint32_t start, uint32_t finish)
+static t_list	*select_alpha_max(t_list *data)
 {
-	uint32_t index;
-	uint32_t i;
+	t_list		*el;
 
-	index = start;
-	i = start;
-	while (++i <= finish)
+	el = data;
+	while (data)
 	{
-		if (ft_strcmp(data[i].name, data[index].name) > 0)
-			index = i;
-		if (ft_strcmp(data[i].name, data[index].name) == 0)
+		if (ft_strcmp(((t_sym *)(data->content))->name, \
+		((t_sym *)(el->content))->name) > 0)
+			el = data;
+		if (ft_strcmp(((t_sym *)(data->content))->name, \
+		((t_sym *)(el->content))->name) == 0)
 		{
-			if (data[i].value > data[index].value)
-				index = i;
+			if (((t_sym *)(data->content))->value > \
+			((t_sym *)(el->content))->value)
+				el = data;
 		}
+		data = data->next;
 	}
-	return (index);
+	return (el);
 }
 
-void			alpha_sort(t_sym *data[], uint32_t len, bool rev)
+void			remove_lst(t_list **syms, t_list *lst)
 {
-	uint32_t	i;
-	t_sym		tmp;
-	uint32_t	index;
+	t_list	*tmp;
+	t_list	*prev;
 
-	i = -1;
-	while (++i < (len - 1))
+	tmp = *syms;
+	prev = NULL;
+	while (tmp && (((t_sym *)(tmp->content))->index != \
+	((t_sym *)(lst->content))->index))
 	{
-		index = (rev) ? select_alpha_max(*data, i, len - 1) : \
-				select_alpha_min(*data, i, len - 1);
-		tmp = (*data)[i];
-		(*data)[i] = (*data)[index];
-		(*data)[index] = tmp;
+		prev = tmp;
+		tmp = tmp->next;
 	}
+	if (tmp)
+	{
+		if (prev)
+			prev->next = tmp->next;
+		else
+			*syms = tmp->next;
+	}
+}
+
+void			alpha_sort(t_list **syms, bool rev)
+{
+	t_list		*lst;
+	t_list		*sort;
+
+	sort = NULL;
+	while ((*syms)->next)
+	{
+		lst = (rev) ? select_alpha_max(*syms) : \
+				select_alpha_min(*syms);
+		remove_lst(syms, lst);
+		lst->next = NULL;
+		add_list(&sort, lst);
+	}
+	add_list(&sort, *syms);
+	*syms = sort;
 }
