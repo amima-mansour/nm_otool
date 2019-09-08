@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 10:00:51 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/03 10:00:52 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/08 09:20:18 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static t_list	*select_num_max(t_list *data)
 	data = data->next;
 	while (data)
 	{
-		if (((t_sym *)(data->content))->value > ((t_sym *)(el->content))->value)
+		if (((t_sym *)(data->content))->value >= ((t_sym *)(el->content))->value)
 			el = data;
 		data = data->next;
 	}

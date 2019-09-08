@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:12:03 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/07 15:15:44 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/08 09:05:58 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,15 @@ static void		match_symbol_section(t_list *sect_lst, t_sym *sym)
 		else
 			sym->type_s = 'S';
 	}
+	else
+		sym->type_s = 'S';
 }
 
-static void		get_single_symbol(t_list **lst, t_list *sects)
+static void		get_single_symbol(t_list *lst, t_list *sects)
 {
 	t_sym *sym;
 
-	sym = ((t_sym*)((*lst)->content));
+	sym = ((t_sym*)(lst->content));
 	sym->type_s = '?';
 	if (N_STAB & sym->type)
 		sym->type_s = '-';
@@ -72,7 +74,7 @@ void			get_symbol_letter(t_list *data, t_list *sects)
 	tmp = data;
 	while (tmp)
 	{
-		get_single_symbol(&tmp, sects);
+		get_single_symbol(tmp, sects);
 		tmp = tmp->next;
 	}
 	free_list(sects);

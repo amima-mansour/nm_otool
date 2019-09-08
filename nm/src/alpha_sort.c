@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 09:59:32 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/07 14:29:35 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/08 08:35:37 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static t_list	*select_alpha_min(t_list *data)
 		if (ft_strcmp(((t_sym *)(data->content))->name, \
 		((t_sym *)(el->content))->name) < 0)
 			el = data;
-		//ft_printf("sortie = %.5s\n", ((t_sym *)(data->content))->name);
 		if (ft_strcmp(((t_sym *)(data->content))->name, \
 		((t_sym *)(el->content))->name) == 0)
 		{

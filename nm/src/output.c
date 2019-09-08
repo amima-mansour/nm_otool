@@ -6,7 +6,7 @@
 /*   By: amansour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 12:07:41 by amansour          #+#    #+#             */
-/*   Updated: 2019/09/07 15:06:57 by amansour         ###   ########.fr       */
+/*   Updated: 2019/09/08 08:40:17 by amansour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void		add_sym(t_list **symlst, t_sym data, char *filename)
 		errors(filename, MAP_ERROR);
 		exit(0);
 	}
-	ft_lstadd(symlst, lst);
+	add_list(symlst, lst);
 }
 
 bool			output_32(struct symtab_command *sym, t_file *f, uint32_t nsyms)
