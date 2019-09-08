@@ -75,15 +75,19 @@ void			print_nm(t_file *f, bool is64)
 	t_list		*data;
 
 	(g_multi_file) ? ft_printf("\n%s:\n", f->filename) : 0;
+	//print_list(f->syms);
 	sort(&(f->syms));
 	get_symbol_letter(f->syms, f->sects);
 	data = f->syms;
 	while (data)
 	{
-		ft_printf("INDEX\n");
-		print_list(data);
+		//ft_printf("INDEX\n");
+		//print_list(data);
 		if (((t_sym*)(data->content))->type_s == '-')
-			continue ;
+		{
+			data = data->next;
+			continue;
+		}
 		print_addr(data, is64);
 		ft_putnstr(f, data->content);
 		data = data->next;

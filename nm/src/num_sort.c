@@ -17,6 +17,7 @@ static t_list	*select_num_min(t_list *data)
 	t_list		*el;
 
 	el = data;
+	data = data->next;
 	while (data)
 	{
 		if (((t_sym *)(data->content))->value < ((t_sym *)(el->content))->value)
@@ -31,6 +32,7 @@ static t_list	*select_num_max(t_list *data)
 	t_list		*el;
 
 	el = data;
+	data = data->next;
 	while (data)
 	{
 		if (((t_sym *)(data->content))->value > ((t_sym *)(el->content))->value)

@@ -15,13 +15,18 @@
 static t_list	*select_alpha_min(t_list *data)
 {
 	t_list		*el;
+	int			i;
 
 	el = data;
+	i = 0;
+	data = data->next;
 	while (data)
 	{
+		//ft_printf("renteri = %.5s\n", ((t_sym*)(data->content))->name);
 		if (ft_strcmp(((t_sym *)(data->content))->name, \
 		((t_sym *)(el->content))->name) < 0)
 			el = data;
+		//ft_printf("sortie = %.5s\n", ((t_sym *)(data->content))->name);
 		if (ft_strcmp(((t_sym *)(data->content))->name, \
 		((t_sym *)(el->content))->name) == 0)
 		{
@@ -29,6 +34,7 @@ static t_list	*select_alpha_min(t_list *data)
 			((t_sym *)(el->content))->value)
 				el = data;
 		}
+		//ft_printf("sortie = %s\n I = %d\n", ((t_sym*)(el->content))->name, ++i);
 		data = data->next;
 	}
 	return (el);
@@ -39,6 +45,7 @@ static t_list	*select_alpha_max(t_list *data)
 	t_list		*el;
 
 	el = data;
+	data = data->next;
 	while (data)
 	{
 		if (ft_strcmp(((t_sym *)(data->content))->name, \
